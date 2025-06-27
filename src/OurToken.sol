@@ -8,5 +8,4 @@ contract OurToken is ERC20 {
     constructor(uint256 initialsupply) ERC20("OurToken", "OTK") {
         _mint(msg.sender, initialsupply);
     }
-    
 }
