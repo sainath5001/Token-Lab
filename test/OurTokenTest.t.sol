@@ -96,4 +96,23 @@ contract OurTokenTest is Test {
         assertEq(ourToken.balanceOf(alice), transferAmount);
         assertEq(ourToken.balanceOf(bob), STARTING_BALANCE - transferAmount);
     }
+
+    //     function testCannotMintAfterDeployment() public {
+    //     vm.expectRevert(); // no mint function exposed, so any call should fail
+    //     ourToken.mint(bob, 1 ether); // will fail to compile unless added, so no need if mint is not in your code
+    // }
+
+    //     function testCannotBurnAfterDeployment() public {
+    //         vm.expectRevert(); // no burn function exposed, so any call should fail
+    //         ourToken.burn(bob, 1 ether); // will fail to compile unless added, so no need if burn is not in your code
+    //     }
+
+    function testNameAndSymbol() public view {
+        assertEq(ourToken.name(), "OurToken");
+        assertEq(ourToken.symbol(), "OTK");
+    }
+
+    function testDecimals() public view {
+        assertEq(ourToken.decimals(), 18);
+    }
 }
