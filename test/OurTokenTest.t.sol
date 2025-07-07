@@ -28,7 +28,7 @@ contract OurTokenTest is Test {
     }
 
     function testTotalSupply() public view {
-        assertEq(ourToken.totalSupply(), STARTING_BALANCE);
+        assertEq(ourToken.totalSupply(), 1000 ether); // 1000 tokens with 18 decimals
     }
 
     function testTransfer() public {
@@ -85,11 +85,11 @@ contract OurTokenTest is Test {
     }
 
     function testAllowancesWorks() public {
-        uint256 initiaAllowance = 1000;
+        uint256 initiaAllowance = 1000 ether;
         vm.prank(bob);
         ourToken.approve(alice, initiaAllowance);
 
-        uint256 transferAmount = 500;
+        uint256 transferAmount = 500 ether;
         vm.prank(alice);
         ourToken.transferFrom(bob, alice, transferAmount);
 
@@ -114,5 +114,14 @@ contract OurTokenTest is Test {
 
     function testDecimals() public view {
         assertEq(ourToken.decimals(), 18);
+    }
+
+    function testFuzzingTransfer(uint256 amount) public {
+        amount = bound(amount, 1 ether, 100 ether); // make sure it's in a valid range
+
+        vm.prank(bob);
+        ourToken.transfer(alice, amount);
+
+        assertEq(ourToken.balanceOf(alice), amount);
     }
 }
