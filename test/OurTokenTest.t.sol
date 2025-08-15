@@ -124,4 +124,17 @@ contract OurTokenTest is Test {
 
         assertEq(ourToken.balanceOf(alice), amount);
     }
+
+    function testfuzzingTransferFrom(address spender, address recipient, uint256 amount) public {
+        vm.assume(spender != address(0) && recipient != address(0) && spender != recipient);
+        amount = bound(amount, 1 ether, 100 ether); // make sure it's in a valid range
+
+        vm.prank(bob);
+        ourToken.approve(spender, amount);
+
+        vm.prank(spender);
+        ourToken.transferFrom(bob, recipient, amount);
+
+        assertEq(ourToken.balanceOf(recipient), amount);
+    }
 }
