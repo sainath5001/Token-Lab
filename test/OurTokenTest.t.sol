@@ -137,4 +137,14 @@ contract OurTokenTest is Test {
 
         assertEq(ourToken.balanceOf(recipient), amount);
     }
+
+    function testfuzzingapprove(address spender, uint256 amount) public {
+        vm.assume(spender != address(0));
+        amount = bound(amount, 1 ether, 100 ether); // make sure it's in a valid range
+
+        vm.prank(bob);
+        ourToken.approve(spender, amount);
+
+        assertEq(ourToken.allowance(bob, spender), amount);
+    }
 }
