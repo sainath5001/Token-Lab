@@ -147,4 +147,17 @@ contract OurTokenTest is Test {
 
         assertEq(ourToken.allowance(bob, spender), amount);
     }
+
+    function testfuzzingdecreaseAllowance(address spender, uint256 amount) public {
+        vm.assume(spender != address(0));
+        amount = bound(amount, 1 ether, 100 ether); // make sure it's in a valid range
+
+        vm.prank(bob);
+        ourToken.approve(spender, amount);
+
+        vm.prank(bob);
+        ourToken.decreaseAllowance(spender, amount / 2); // decrease by half
+
+        assertEq(ourToken.allowance(bob, spender), amount / 2);
+    }
 }
