@@ -160,4 +160,20 @@ contract OurTokenTest is Test {
 
         assertEq(ourToken.allowance(bob, spender), amount / 2);
     }
+
+    function testfuzzingAllowanceworks(address spender, uint256 amount) public {
+        vm.assume(spender != address(0));
+        amount = bound(amount, 1 ether, 100 ether); // make sure it's in a valid range
+
+        vm.prank(bob);
+        ourToken.approve(spender, amount);
+
+        assertEq(ourToken.allowance(bob, spender), amount);
+
+        vm.prank(spender);
+        ourToken.transferFrom(bob, alice, amount / 2); // transfer half
+
+        assertEq(ourToken.balanceOf(alice), amount / 2);
+        assertEq(ourToken.allowance(bob, spender), amount / 2);
+    }
 }
